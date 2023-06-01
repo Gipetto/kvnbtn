@@ -10,23 +10,47 @@
 		html, body {
 			height: 100%;
 			margin: 0;
-			padding: 1em 0 0 0;
 			overflow: hidden;
 		}
 		body {	
-			padding: 2em 5em;
 			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 			font-size: 250%;
 			background: #eee;
 			background: linear-gradient(0deg, #eee 0%, #ccc 100%);
 			text-align: center;
-		}	
-		a {	
+		}
+		#wrap {
+			display: flex;
+			flex-direction: column;
+			align-content: space-between;
+			height: 100%;
+		}
+		.audio {
+			flex-grow: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.about {
+			padding-bottom: 1em;
+		}
+		.mstdn {
+			border: none;
+			padding: 0;
+			cursor: pointer;
+			background: transparent;
+			font-size: inherit;
+			text-decoration: underline;
+		}
+		a, 
+		.mstdn {
 			font-weight: bold;
 			color: #777;
 			transition: color .2s ease;
 		}
-		a:hover {	
+		a:hover, 
+		.mstdn:active, 
+		.mstdn:hover {	
 			color: #555;
 		}
 		p {	
@@ -34,10 +58,6 @@
 			line-height: 1.4;
 			color: #999;
 			text-align: center;
-		}
-		p span {	
-			margin: 0 4px;
-			color: #ccc;
 		}
 		.btn,
 		.btn .inner,
@@ -51,7 +71,6 @@
 		.btn {
 			box-shadow: 0 15px 0 #1a74a1, 0 15px 20px rgba(0,0,0,.35);
 			transition: box-shadow .2s ease-in-out;
-			margin-bottom: 50px;
 		}
 		.btn .outer {
 			padding: 3px;
@@ -75,40 +94,112 @@
 			transform: translate(0, 4px);
 			transition: transform 0s ease-in-out;
 		}
+		.mstdn-instance {
+			height: 0;
+			overflow: hidden;
+			visibility: none;
+			color: #555;
+		}
+		.mstdn-instance.visible {
+			height: auto;
+			visibility: visible;
+		}
+		.mstdn-instance input {
+			margin: 2px 0 4px 2px;
+		}
+		.mstdn-instance input:focus::placeholder {
+			opacity: 0;
+		}
+		.mstdn-instance button {
+			border-radius: 3px;
+			border: 1px solid #555;
+			background-color: rgb(233, 233, 237);
+		}
+		.mstdn-instance button.enabled {
+			background-color: #3194c6;
+			color: white;
+		}
 	</style>
 </head>
 <body>
-	<div id="wrap">		
-		<audio autobuffer preload="auto">
-			<source src="kevin-long.m4a" type="audio/mp4" />
-			<source src="kevin-long.mp3" type="audio/mpeg" />
-			<source src="kevin-long.ogg" type="audio/ogg" />
-			<source src="kevin-long.wav" type="audio/wav" />
-			Boo! Your browser does not support the audio element.
-		</audio>
-		<a class="btn"><span class="outer"><span class="inner">Kevin!</span></span></a>
-		<p><a href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fkvnbtn.com" class="twitter-share-button" target="_blank">Tweet This!</a></p>
-		<p>Est. 2012 by <a href="https://top-frog.com">Shawn Parker</a></p>
+	<div id="wrap">
+		<div class="audio">
+			<audio autobuffer preload="auto">
+				<source src="kevin-long.m4a" type="audio/mp4" />
+				<source src="kevin-long.mp3" type="audio/mpeg" />
+				<source src="kevin-long.ogg" type="audio/ogg" />
+				<source src="kevin-long.wav" type="audio/wav" />
+				Boo! Your browser does not support the audio element.
+			</audio>
+			<a class="btn"><span class="outer"><span class="inner">Kevin!</span></span></a>
+		</div>
+		<div class="about">
+			<p>
+				<a href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fkvnbtn.com" class="twitter-share-button" target="_blank">Tweet This!</a>
+				&nbsp;|&nbsp;
+				<button class="mstdn">Toot This!</button>
+			</p>
+			<p class="mstdn-instance">
+				<span>Mastadon Instance:</span><br/>
+				<label>https://<input type="text" inputmode="url" autocapitalize="none" placeholder="hachyderm.io"/></label>&nbsp;
+				<button>Toot!</button>
+			</p>
+			
+			<p>Est. 2012 by <a href="https://top-frog.com">Shawn Parker</a></p>
+		</div>
 	</div>	
 	<script type="text/javascript">
 		function kvn() {
-			let loaded = false;
-			const btn = document.querySelector(".btn");
-			const kevin = document.querySelector('audio');
+			let loaded = false
+			const btn = document.querySelector(".btn")
+			const kevin = document.querySelector('audio')
 
 			btn.addEventListener("click", (e) => {
-				e.preventDefault();
+				e.preventDefault()
 
 				// once upon a time mobile safari needed this, so everyone gets it
 				if (!loaded) {
-					kevin.load();
-					loaded = true;
+					kevin.load()
+					loaded = true
 				} else {
-					kevin.currentTime = 0;
+					kevin.currentTime = 0
 				}
 				
-				kevin.play();
+				kevin.play()
 			});
+
+			const share = document.querySelector(".mstdn")
+			const instance = document.querySelector(".mstdn-instance")
+			const instanceInput = document.querySelector(".mstdn-instance input")
+			const toot = document.querySelector(".mstdn-instance button")
+			
+			instanceInput.value = ""
+			
+			share.addEventListener("click", (e) => {
+				e.preventDefault()
+				instance.classList.toggle("visible")
+			})
+
+			instanceInput.addEventListener("keyup", (e) => {
+				if (instanceInput.value.length) {
+					toot.classList.add("enabled")
+				} else {
+					toot.classList.remove("enabled")
+				}
+			})
+			
+			toot.addEventListener("click", (e) => {
+				e.preventDefault()
+				const instanceValue = instanceInput.value
+
+				if (!instanceValue.length) {
+					instanceInput.focus()
+					return
+				}
+
+				const txt = "https%3A%2F%2Fkvnbtn.com"
+				window.open(`https://${instanceValue}/share?text=${txt}`, "_blank")
+			})
 		}
 
 		'loading' === document.readyState ? 

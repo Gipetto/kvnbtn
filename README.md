@@ -13,3 +13,7 @@ So we did.
 
 ## April 12, 2022
 - Longer audio clip
+
+## June 1, 2023
+- Add Mastadon share link
+- Added flexible layout
