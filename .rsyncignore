@@ -1,0 +1,5 @@
+.git
+.gitignore
+.rsyncignore
+Makefile
+README.md
