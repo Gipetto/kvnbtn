@@ -17,3 +17,10 @@ So we did.
 ## June 1, 2023
 - Add Mastadon share link
 - Added flexible layout
+
+## November 12, 2024
+- Deprecate Twitter links
+- Add Threads & Bluesky links
+
+## November 13, 2024
+- SEO & performance updates
