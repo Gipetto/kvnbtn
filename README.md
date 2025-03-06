@@ -27,3 +27,4 @@ So we did.
 
 ## March 6, 2025
 - Deprecate share on Threads & Facebook
+- Add link to GitHub repo
