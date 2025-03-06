@@ -24,3 +24,6 @@ So we did.
 
 ## November 13, 2024
 - SEO & performance updates
+
+## March 6, 2025
+- Deprecate share on Threads & Facebook
